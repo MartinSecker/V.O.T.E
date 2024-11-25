@@ -1,9 +1,38 @@
-[gd_scene format=3 uid="uid://c8y24t4g5keyb"]
+[gd_scene load_steps=7 format=3 uid="uid://c8y24t4g5keyb"]
 
-[node name="Node2D" type="Node2D"]
+[ext_resource type="Material" uid="uid://dykoxf2ufv6ko" path="res://node_2d.tres" id="1_4b3gi"]
+[ext_resource type="Script" path="res://character_body_3d.gd" id="1_t1hil"]
 
-[node name="Label" type="Label" parent="."]
-offset_right = 40.0
-offset_bottom = 23.0
-text = "ASFALTIOS
-"
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_l3lmd"]
+material = ExtResource("1_4b3gi")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_alfey"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_icws6"]
+material = ExtResource("1_4b3gi")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_avy21"]
+material = ExtResource("1_4b3gi")
+
+[node name="Enemy" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.265483, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_l3lmd")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.105214, 0)
+script = ExtResource("1_t1hil")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+shape = SubResource("BoxShape3D_alfey")
+
+[node name="MeshInstance3D (Head)" type="MeshInstance3D" parent="CharacterBody3D"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.0415696, 0.323436, -0.00123253)
+mesh = SubResource("SphereMesh_icws6")
+
+[node name="MeshInstance3D (Right Leg)" type="MeshInstance3D" parent="CharacterBody3D"]
+transform = Transform3D(0.0453889, 0.0209726, 0, -0.0209726, 0.0453889, 0, 0, 0, 0.05, -0.0850839, -0.0748707, -0.00330027)
+mesh = SubResource("CapsuleMesh_avy21")

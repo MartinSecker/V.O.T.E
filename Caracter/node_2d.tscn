@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://j1g52xi4xc0f"]
 
-[ext_resource type="Script" path="res://charachter_move.gd" id="1_kpvqs"]
-[ext_resource type="Script" path="res://camera_3d.gd" id="2_juq6a"]
+[ext_resource type="Script" path="res://Script/charachter_move.gd" id="1_j2lb5"]
+[ext_resource type="Script" path="res://Script/camera_3d.gd" id="2_v5n48"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0ceav"]
 
@@ -26,7 +26,7 @@ light_volumetric_fog_energy = 0.838
 [node name="CharacterBody3D" type="CharacterBody3D" parent="."]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 5, 0)
 disable_mode = 2
-script = ExtResource("1_kpvqs")
+script = ExtResource("1_j2lb5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
 shape = SubResource("CapsuleShape3D_0ceav")
@@ -36,7 +36,7 @@ mesh = SubResource("CapsuleMesh_tm2d4")
 
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]
 transform = Transform3D(0.5, 0, 0, 0, 0.433013, 0.25, 0, -0.25, 0.433013, 0, 2.5, 5)
-script = ExtResource("2_juq6a")
+script = ExtResource("2_v5n48")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 disable_mode = 1

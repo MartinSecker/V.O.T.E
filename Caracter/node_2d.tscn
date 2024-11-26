@@ -1,8 +1,8 @@
 [gd_scene load_steps=13 format=3 uid="uid://j1g52xi4xc0f"]
 
-[ext_resource type="Script" path="res://Script/charachter_move.gd" id="1_kpvqs"]
-[ext_resource type="Material" uid="uid://5tg0swegvq0v" path="res://skin_color.tres" id="2_dfnnp"]
-[ext_resource type="Script" path="res://Script/camera_3d.gd" id="2_juq6a"]
+[ext_resource type="Script" path="res://Script/charachter_move.gd" id="1_xby3v"]
+[ext_resource type="Material" uid="uid://5tg0swegvq0v" path="res://skin_color.tres" id="2_afm2v"]
+[ext_resource type="Script" path="res://Script/camera_3d.gd" id="3_ycnkd"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0ceav"]
 
@@ -13,13 +13,13 @@ albedo_color = Color(0.454902, 0.588235, 0.152941, 1)
 material = SubResource("StandardMaterial3D_e3s7g")
 
 [sub_resource type="SphereMesh" id="SphereMesh_jbd5l"]
-material = ExtResource("2_dfnnp")
+material = ExtResource("2_afm2v")
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_76qqs"]
-material = ExtResource("2_dfnnp")
+material = ExtResource("2_afm2v")
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_so8d3"]
-material = ExtResource("2_dfnnp")
+material = ExtResource("2_afm2v")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_75gtp"]
 
@@ -40,7 +40,7 @@ light_volumetric_fog_energy = 0.838
 [node name="CharacterBody3D" type="CharacterBody3D" parent="."]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 5, 0)
 disable_mode = 2
-script = ExtResource("1_kpvqs")
+script = ExtResource("1_xby3v")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
 shape = SubResource("CapsuleShape3D_0ceav")
@@ -62,7 +62,7 @@ mesh = SubResource("CapsuleMesh_so8d3")
 
 [node name="Camera" type="Camera3D" parent="CharacterBody3D"]
 transform = Transform3D(0.5, 0, 0, 0, 0.491786, 0.0902596, 0, -0.0902596, 0.491786, 0, 1.5, 2.5)
-script = ExtResource("2_juq6a")
+script = ExtResource("3_ycnkd")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 disable_mode = 1

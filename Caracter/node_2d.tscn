@@ -1,0 +1,77 @@
+[gd_scene load_steps=13 format=3 uid="uid://j1g52xi4xc0f"]
+
+[ext_resource type="Script" path="res://Script/charachter_move.gd" id="1_xby3v"]
+[ext_resource type="Material" uid="uid://5tg0swegvq0v" path="res://skin_color.tres" id="2_afm2v"]
+[ext_resource type="Script" path="res://Script/camera_3d.gd" id="3_ycnkd"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0ceav"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3s7g"]
+albedo_color = Color(0.454902, 0.588235, 0.152941, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_tm2d4"]
+material = SubResource("StandardMaterial3D_e3s7g")
+
+[sub_resource type="SphereMesh" id="SphereMesh_jbd5l"]
+material = ExtResource("2_afm2v")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_76qqs"]
+material = ExtResource("2_afm2v")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_so8d3"]
+material = ExtResource("2_afm2v")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_75gtp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_axkc2"]
+albedo_color = Color(0.759809, 0.83458, 0.992989, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3ou5u"]
+material = SubResource("StandardMaterial3D_axkc2")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.0540788, 0.998537, 0, -0.998537, 0.0540788, 0, 100, 0)
+light_color = Color(1, 0.917647, 0.615686, 1)
+light_energy = 0.516
+light_volumetric_fog_energy = 0.838
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 5, 0)
+disable_mode = 2
+script = ExtResource("1_xby3v")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_0ceav")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_tm2d4")
+
+[node name="Head" type="MeshInstance3D" parent="CharacterBody3D/MeshInstance3D"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 1, 0)
+mesh = SubResource("SphereMesh_jbd5l")
+
+[node name="Arm1" type="MeshInstance3D" parent="CharacterBody3D/MeshInstance3D"]
+transform = Transform3D(0.3, 0, 0, 0, 0.5, 0, 0, 0, 0.3, 0.6, 0.1, 0)
+mesh = SubResource("CapsuleMesh_76qqs")
+
+[node name="Arm2" type="MeshInstance3D" parent="CharacterBody3D/MeshInstance3D"]
+transform = Transform3D(0.3, 0, 0, 0, 0.5, 0, 0, 0, 0.3, -0.6, 0.1, 0)
+mesh = SubResource("CapsuleMesh_so8d3")
+
+[node name="Camera" type="Camera3D" parent="CharacterBody3D"]
+transform = Transform3D(0.5, 0, 0, 0, 0.491786, 0.0902596, 0, -0.0902596, 0.491786, 0, 1.5, 2.5)
+script = ExtResource("3_ycnkd")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+disable_mode = 1
+
+[node name="CollisionPolygon3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0.025, -50, -0.055)
+shape = SubResource("BoxShape3D_75gtp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0.0251037, 0.0137449, -0.0550874)
+mesh = SubResource("PlaneMesh_3ou5u")
+skeleton = NodePath("")

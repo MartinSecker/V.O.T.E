@@ -1,59 +1,51 @@
 extends CharacterBody3D
 
-@export var speed: float = 5.0  # Bevegelseshastighet
-@export var jump_velocity: float = 4.5  # Hoppstyrke
-@export var mouse_sensitivity: float = 0.2  # Følsomhet for musens bevegelse
+const SPEED = 15.0  # Movement speed
+const JUMP_VELOCITY = 4.5  # Jump strength
+@export var mouse_sensitivity: float = 0.2  # Mouse sensitivity for look controls
 
-var yaw: float = 0.0  # Rotasjon på Y-aksen (horisontal rotasjon)
-var pitch: float = 0.0  # Rotasjon på X-aksen (vertikal rotasjon)
+var yaw: float = 0.0  # Rotation around the Y-axis (horizontal)
+var pitch: float = 0.0  # Rotation around the X-axis (vertical)
 
+# Called when the node is added to the scene
 func _ready() -> void:
-	# Sett musemodusen til synlig som standard
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)  # Lock the mouse pointer for first-person controls
 
+# Handles mouse input for looking around
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
-		if Input.is_action_pressed("mouse_look"):
-			# Beregn ny rotasjon basert på musens bevegelser
-			yaw -= event.relative.x * mouse_sensitivity
-			pitch -= event.relative.y * mouse_sensitivity
+		# Update yaw and pitch based on mouse movement
+		yaw -= event.relative.x * mouse_sensitivity
+		pitch = clamp(pitch - event.relative.y * mouse_sensitivity, -89.0, 89.0)
 
-			# Begrens pitch for å unngå ekstrem rotasjon
-			pitch = clamp(pitch, -89.0, 89.0)
+		# Apply rotation to the character and camera
+		rotation_degrees.y = yaw
+		$Camera.rotation_degrees.x = pitch
 
-			# Oppdater rotasjonen for karakteren
-			rotation_degrees = Vector3(pitch, yaw, 0.0)
+	# Allow mouse to be freed when pressing ESC
+	if Input.is_action_just_pressed("ui_cancel"):
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-		else:
-			# Sett musemodus tilbake til synlig når museknappen slippes
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-
+# Physics process to handle movement and gravity
 func _physics_process(delta: float) -> void:
-	# Legg til tyngdekraft hvis karakteren ikke står på bakken
+	# Add the gravity.
 	if not is_on_floor():
-		velocity.y += ProjectSettings.get_setting("physics/3d/default_gravity") * delta
+		velocity += get_gravity() * delta
 
-	# Hopp når spilleren trykker på "ui_accept" (vanligvis mellomromstasten)
+	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = jump_velocity
+		velocity.y = JUMP_VELOCITY
 
-	# Bevegelse ved hjelp av tastaturet
-	var input_dir = Vector2(
-		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
-		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
-	).normalized()
+	# Get the input direction and handle the movement/deceleration.
+	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
-	if input_dir.length() > 0:
-		# Konverter 2D-input til 3D-retning basert på karakterens rotasjon
-		var forward = -global_transform.basis.z.normalized()  # Framme
-		var right = global_transform.basis.x.normalized()  # Høyre
-		var direction = (forward * input_dir.y + right * input_dir.x).normalized()  # Bevegelsesretning test
-		velocity.x = direction.x * speed
-		velocity.z = direction.z * speed
+	if direction:
+		velocity.x = direction.x * SPEED
+		velocity.z = direction.z * SPEED
 	else:
-		# Reduser bevegelsen gradvis når ingen input gis
-		velocity.x = lerp(velocity.x, 0, 0.1)
-		velocity.z = lerp(velocity.z, 0, 0.1)
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.z = move_toward(velocity.z, 0, SPEED)
 
-	# Utfør bevegelse og oppdater `velocity`
-	move_and_slide()  # Bruk kun move_and_slide() uten argumenter
+	# Move the character using velocity
+	move_and_slide()
